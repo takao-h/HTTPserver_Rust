@@ -7,7 +7,6 @@ fn main() {
 
     for stream in listener.incoming() {
         let _stream = stream.unwrap();
-        // println!("Connection established!");
         handle_connection(_stream);
     }
 }

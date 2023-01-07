@@ -17,7 +17,7 @@ fn handle_connection(mut _stream: TcpStream) {
     stream.read(&mut buffer).unwrap();
 
     let response = "HTTP/1.1 200 OK\r\n\r\n";
-    let response_400 = HTTP/1.1 400 OK\r\n\r\n
+    let response_400 = "HTTP/1.1 400 Bad Request\r\n\r\n";
 
     stream.write(response.as_bytes()).unwrap();
     stream.write(response_400.as_bytes()).unwrap();

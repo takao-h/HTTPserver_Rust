@@ -20,5 +20,7 @@ fn handle_connection(mut _stream: TcpStream) {
     let response_400 = HTTP/1.1 400 OK\r\n\r\n
 
     stream.write(response.as_bytes()).unwrap();
+    stream.write(response_400.as_bytes()).unwrap();
+
     stream.flush().unwrap();
 }

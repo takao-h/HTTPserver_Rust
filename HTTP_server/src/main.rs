@@ -15,12 +15,13 @@ fn handle_connection(mut _stream: TcpStream) {
     let mut buffer = [0; 1024];
 
     stream.read(&mut buffer).unwrap();
+    let mut file = File::open("hello.html").unwrap();
 
-    let response = "HTTP/1.1 200 OK\r\n\r\n";
-    let response_400 = "HTTP/1.1 400 Bad Request\r\n\r\n";
+    let mut contents = String::new();
+    file.read_to_string(&mut contents).unwrap();
+
+    let response = format!("HTTP/1.1 200 OK\r\n\r\n{}", contents);
 
     stream.write(response.as_bytes()).unwrap();
-    stream.write(response_400.as_bytes()).unwrap();
-
     stream.flush().unwrap();
 }

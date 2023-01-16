@@ -17,6 +17,9 @@ fn handle_connection(mut _stream: TcpStream) {
     _stream.read(&mut buffer).unwrap();
 
     let get = b"GET / HTTP/1.1\r\n";
+    let put: &[u8; 16] = b"PUT / HTTP/1.1\r\n";
+    let post: &[u8; 17] = b"POST / HTTP/1.1\r\n";
+    let delete: &[u8; 19] = b"DELETE / HTTP/1.1\r\n";
 
     if buffer.starts_with(get) {
         let mut file = File::open("hello.html").unwrap();

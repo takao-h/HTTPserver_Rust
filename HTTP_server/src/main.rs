@@ -1,8 +1,8 @@
 use std::fmt::format;
+use std::fs::File;
 use std::io::prelude::*;
 use std::net::TcpListener;
 use std::net::TcpStream;
-use std::fs::File;
 use std::thread;
 use std::time::Duration;
 
@@ -10,8 +10,11 @@ fn main() {
     let listener = TcpListener::bind("127.0.0.1:7878").unwrap();
 
     for stream in listener.incoming() {
-        let _stream = stream.unwrap();
-        handle_connection(_stream);
+        let stream = stream.unwrap();
+
+        thread::spawn(|| {
+            handle_connection(stream);
+        });
     }
 }
 
@@ -43,5 +46,4 @@ fn handle_connection(mut _stream: TcpStream) {
 
     _stream.write(response.as_bytes()).unwrap();
     _stream.flush().unwrap();
-
 }

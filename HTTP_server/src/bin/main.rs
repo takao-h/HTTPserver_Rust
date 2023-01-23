@@ -1,3 +1,5 @@
+extern crate HTTP_server;
+use HTTP_server::ThreadPool;
 use std::fmt::format;
 use std::fs::File;
 use std::io::prelude::*;

@@ -36,7 +36,7 @@ type Job = Box<FnBox + Send + 'static>;
 
 struct Worker {
     id: usize,
-    thread: thread::JoinHandle<()>,
+    thread: Option<thread::JoinHandle<()>>,
 }
 
 impl Worker {

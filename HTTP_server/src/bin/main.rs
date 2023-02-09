@@ -1,5 +1,4 @@
 extern crate HTTP_server;
-use HTTP_server::ThreadPool;
 use std::fmt::format;
 use std::fs::File;
 use std::io::prelude::*;
@@ -7,28 +6,28 @@ use std::net::TcpListener;
 use std::net::TcpStream;
 use std::thread;
 use std::time::Duration;
+use HTTP_server::ThreadPool;
 
 fn main() {
     let listener = TcpListener::bind("127.0.0.1:7878").unwrap();
     let pool = ThreadPool::new(4);
 
-    for stream in listener.incoming() {
+    for stream in listener.incoming().take(2) {
         let stream = stream.unwrap();
 
         pool.execute(|| {
             handle_connection(stream);
         });
     }
+
+    println!("Shutting down.");
 }
 
-fn handle_connection(mut _stream: TcpStream) {
+fn handle_connection(mut stream: TcpStream) {
     let mut buffer = [0; 1024];
-    _stream.read(&mut buffer).unwrap();
+    stream.read(&mut buffer).unwrap();
 
     let get = b"GET / HTTP/1.1\r\n";
-    // let put: &[u8; 16] = b"PUT / HTTP/1.1\r\n";
-    // let post: &[u8; 17] = b"POST / HTTP/1.1\r\n";
-    // let delete: &[u8; 19] = b"DELETE / HTTP/1.1\r\n";
     let sleep = b"GET /sleep HTTP/1.1\r\n";
 
     let (status_line, filename) = if buffer.starts_with(get) {
@@ -47,6 +46,6 @@ fn handle_connection(mut _stream: TcpStream) {
 
     let response = format!("{}{}", status_line, contents);
 
-    _stream.write(response.as_bytes()).unwrap();
-    _stream.flush().unwrap();
+    stream.write(response.as_bytes()).unwrap();
+    stream.flush().unwrap();
 }

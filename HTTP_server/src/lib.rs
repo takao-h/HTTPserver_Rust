@@ -3,6 +3,10 @@ use std::thread;
 pub struct ThreadPool {
     workers: Vec<Worker>,
 }
+enum Message {
+    NewJob(Job),
+    Terminate,
+}
 
 impl ThreadPool {
     // --snip--
